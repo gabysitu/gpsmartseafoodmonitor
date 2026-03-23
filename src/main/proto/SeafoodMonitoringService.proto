@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.seafoodmonitoring";
+option java_outer_classname = "SeafoodMonitoringProto";
+
+package seafoodmonitoring;
+
+service SeafoodMonitoringService {
+  rpc EvaluateSeafood(SeafoodRequest) returns (SeafoodEvaluation);
+  rpc EvaluateSeafoodBatch(stream SeafoodRequest) returns (BatchSummary);
+}
+
+message SeafoodRequest {
+  string species = 1;
+  string location = 2;
+}
+
+message SeafoodEvaluation {
+  string species = 1;
+  bool safeToEat = 2;
+  bool sustainable = 3;
+  string alarm = 4;
+}
+
+message BatchSummary {
+  int32 totalItems = 1;
+  int32 unsafeItems = 2;
+  int32 unsustainableItems = 3;
+  string overallMessage = 4;
+}

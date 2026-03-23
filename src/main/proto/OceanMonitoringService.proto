@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.oceanmonitoring";
+option java_outer_classname = "OceanMonitoringProto";
+
+package oceanmonitoring;
+
+service OceanMonitoringService {
+  rpc MonitorOceanConditions(Location) returns (stream OceanData);
+  rpc CurrentOceanConditions(Location) returns (OceanData);
+}
+
+message Location {
+  string location = 1;
+}
+
+message OceanData {
+  double temperatureC = 1;
+  double oxygenLevel = 2;
+  double acidityPH = 3;
+  double pollutionLevel = 4;
+}

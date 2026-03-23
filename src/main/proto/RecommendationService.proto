@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "generated.grpc.recommendation";
+option java_outer_classname = "RecommendationProto";
+
+package recommendation;
+
+service RecommendationService {
+  rpc LiveRecommendations(stream RecommendationRequest) returns (stream RecommendationResponse);
+}
+
+message RecommendationRequest {
+  string location = 1;
+  string selectedSpecies = 2;
+  string reason = 3;
+}
+
+message RecommendationResponse {
+  repeated string recommendedSpecies = 1;
+  repeated string avoidSpecies = 2;
+}
