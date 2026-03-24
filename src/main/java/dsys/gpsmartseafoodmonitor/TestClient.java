@@ -19,7 +19,6 @@ import generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
-//test for github
 
 public class TestClient {
      public static void main(String[] args) {
