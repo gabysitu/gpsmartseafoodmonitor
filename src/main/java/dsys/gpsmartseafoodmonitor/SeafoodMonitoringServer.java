@@ -16,11 +16,13 @@ import io.grpc.ServerBuilder;
 public class SeafoodMonitoringServer {
     public static void main(String[] args) {
         
+        //Create the server in a different port 
         try {
             Server server = ServerBuilder.forPort(50052)
                     .addService(new SeafoodMonitoringServiceImpl())
                     .build();
-
+            
+            //Start server
             server.start();
             System.out.println("SeafoodMonitoringService is running on port 50052");
 

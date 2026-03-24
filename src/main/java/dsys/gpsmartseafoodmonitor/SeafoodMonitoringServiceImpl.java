@@ -16,11 +16,11 @@ import generated.grpc.seafoodmonitoring.SeafoodMonitoringServiceGrpc;
 import generated.grpc.seafoodmonitoring.SeafoodRequest;
 
 
-// gRPC
+// Import gRPC
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
-//Implement the service
+//Implement the Seafood Monitor Service
 public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.SeafoodMonitoringServiceImplBase {
     
   
@@ -29,7 +29,7 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
     @Override
     public void evaluateSeafood(SeafoodRequest request, StreamObserver<SeafoodEvaluation> responseObserver) {
 
-        // Read request values
+        // In this step I aim to get the species and location send by the user
         String species = request.getSpecies().trim().toLowerCase();
         String location = request.getLocation().trim().toLowerCase();
 
@@ -43,7 +43,7 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
             return;
         }
 
-        // Evaluate seafood using simple rules
+        // Check the rules that I am applying for the server
         SeafoodEvaluation evaluation = buildEvaluation(species, location);
 
         // Send result to client
@@ -51,7 +51,8 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
         responseObserver.onCompleted();
     }
     
-    //Client sends several request and the server will return a response (Summary)
+//Comment for me: Right now I can test one specie now for the GUI how can the client send multiple sepecies?    
+//Client sends several request and the server will return a response (Summary)
     @Override
     public StreamObserver<SeafoodRequest> evaluateSeafoodBatch(StreamObserver<BatchSummary> responseObserver) {
 
@@ -65,7 +66,8 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
             public void onNext(SeafoodRequest request) {
                 // Called every time client sends one seafood item
                 totalItems++;
-
+                
+                //Evaluation according to the rules
                 SeafoodEvaluation evaluation = buildEvaluation(
                         request.getSpecies().trim().toLowerCase(),
                         request.getLocation().trim().toLowerCase()
@@ -81,16 +83,16 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
                     unsustainableItems++;
                 }
             }
-
+            
+            //If something goes wrong send a message to the client
             @Override
             public void onError(Throwable t) {
-                // If client stream fails, print error on server side
                 System.err.println("Error in client stream: " + t.getMessage());
             }
-
+            
+            //Call this method when the client sends all the request and build a summary with all the information
             @Override
             public void onCompleted() {
-                // Create the summary with all the input send by the client
                 BatchSummary summary = BatchSummary.newBuilder()
                         .setTotalItems(totalItems)
                         .setUnsafeItems(unsafeItems)
@@ -108,30 +110,32 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
         };
     }
 
-    // Helper method with simple evaluation rules
+    // In this step I am setting the rules: The seafood is safe? its sustainable?
     private SeafoodEvaluation buildEvaluation(String species, String location) {
-
+        
+        //First: Everything is safe
         boolean safeToEat = true;
         boolean sustainable = true;
         String alarm = "Safe";
 
-        // Example unsafe rule
+        // Second: Contamination example
         if (location.equals("dublin") && species.equals("prawn")) {
             safeToEat = false;
             alarm = "Contaminated";
         }
 
-        // Example sustainability rule
+        // Thirs: Sustainability example
         if (species.equals("tuna")) {
             sustainable = false;
             alarm = "Unsustainable fishing practices";
         }
 
-        // Another species considered more sustainable
+        // Fourth: If the specie is not sustainable send another specie
         if (species.equals("mussels") || species.equals("sardines")) {
             sustainable = true;
         }
-
+        
+        //Fith: Lastly send the summary back
         return SeafoodEvaluation.newBuilder()
                 .setSpecies(species)
                 .setSafeToEat(safeToEat)

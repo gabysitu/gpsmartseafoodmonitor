@@ -9,13 +9,15 @@ package dsys.gpsmartseafoodmonitor;
  * @author gport
  */
 
-//Import the generated grpc
+//Import the generated classes by the proto file
 import generated.grpc.seafoodmonitoring.SeafoodEvaluation;
 import generated.grpc.seafoodmonitoring.SeafoodMonitoringServiceGrpc;
 import generated.grpc.seafoodmonitoring.SeafoodRequest;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
+
+//Import grpc classes
 public class SeafoodTestClient {
     public static void main(String[] args) {
 
