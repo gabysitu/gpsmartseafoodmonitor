@@ -15,34 +15,51 @@ import generated.grpc.oceanmonitoring.Location;
 import generated.grpc.oceanmonitoring.OceanData;
 import generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc;
 
-// Import gRPC communication classes
+// Import gRPC 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
+//Import JmDNS
+import javax.jmdns.ServiceInfo;
 
 public class TestClient {
      public static void main(String[] args) {
+         
+         // Discover Ocean Monitoring service
+        ServiceInfo serviceInfo = SmartSeafoodServiceDiscovery.discoverService("_oceanmonitoring._tcp.local.");
 
-        // Create communication channel to server (localhost:50051)
+        // Check if service was found
+        if (serviceInfo == null) {
+            System.out.println("OceanMonitoringService not found.");
+            return;
+        }
+
+        // Get host and port from discovered service
+        String host = serviceInfo.getHostAddresses()[0];
+        int port = serviceInfo.getPort();
+
+        System.out.println("Discovered OceanMonitoringService at " + host + ":" + port);
+
+        // Create gRPC channel using discovered host and port
         ManagedChannel channel = ManagedChannelBuilder
-                .forAddress("localhost", 50051)
-                .usePlaintext() // No encryption (fine for testing)
+                .forAddress(host, port)
+                .usePlaintext()
                 .build();
 
         try {
-            // Create a blocking stub (client that waits for response)
+            // Create blocking stub
             OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
                     OceanMonitoringServiceGrpc.newBlockingStub(channel);
 
-            // Build request with location
+            // Build request
             Location request = Location.newBuilder()
                     .setLocation("Dublin")
                     .build();
 
-            // Call the server (UNARY RPC)
+            // Call unary RPC
             OceanData response = stub.currentOceanConditions(request);
 
-            // Expected: print returned ocean data
+            // Expected: print ocean values returned by server
             System.out.println("Ocean Conditions for Dublin:");
             System.out.println("Temperature: " + response.getTemperatureC());
             System.out.println("Oxygen Level: " + response.getOxygenLevel());
@@ -50,13 +67,12 @@ public class TestClient {
             System.out.println("Pollution Level: " + response.getPollutionLevel());
 
         } catch (Exception e) {
-            // If call fails → print error
             e.printStackTrace();
-
         } finally {
-            // Always close channel after use
             channel.shutdown();
         }
     }
 }
+        
 
+        

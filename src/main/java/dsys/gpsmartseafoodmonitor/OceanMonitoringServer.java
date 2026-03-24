@@ -19,20 +19,22 @@ public class OceanMonitoringServer {
         try {
             // Create server on port 50051
             Server server = ServerBuilder.forPort(50051)
-
-                    // Attach your service implementation
                     .addService(new OceanMonitoringServiceImpl())
-
-                    // Build the server
                     .build();
 
             // Start the server
             server.start();
-
-            // Expected: message printed when server is running
             System.out.println("OceanMonitoringService is running on port 50051");
+            
+            //Modify this for JmDNS
+             SmartSeafoodServiceRegistration.registerService(
+                    "_oceanmonitoring._tcp.local.",
+                    "OceanMonitoringService",
+                    50051,
+                    "Ocean Monitoring gRPC Service"
+            );
 
-            // Keep server running (wait forever)
+            // Keep server running 
             server.awaitTermination();
 
         } catch (Exception e) {
