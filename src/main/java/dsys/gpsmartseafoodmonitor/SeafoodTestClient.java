@@ -31,7 +31,7 @@ public class SeafoodTestClient {
                     SeafoodMonitoringServiceGrpc.newBlockingStub(channel);
 
             SeafoodRequest request = SeafoodRequest.newBuilder()
-                    .setSpecies("Prawn")
+                    .setSpecies("Tuna")
                     .setLocation("Dublin")
                     .build();
 

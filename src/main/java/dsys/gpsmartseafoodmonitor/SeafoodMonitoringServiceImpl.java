@@ -9,14 +9,20 @@ package dsys.gpsmartseafoodmonitor;
  * @author gport
  */
 
-// Import generated classes from the proto file
+// Import generated classes from SeafoodMonitoringService.proto file
 import generated.grpc.seafoodmonitoring.BatchSummary;
 import generated.grpc.seafoodmonitoring.SeafoodEvaluation;
 import generated.grpc.seafoodmonitoring.SeafoodMonitoringServiceGrpc;
 import generated.grpc.seafoodmonitoring.SeafoodRequest;
 
+//And Import generated classes from OceanMonitoringService.proto file
+import generated.grpc.oceanmonitoring.Location;
+import generated.grpc.oceanmonitoring.OceanData;
+import generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc;
 
 // Import gRPC
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
 
@@ -42,17 +48,32 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
             );
             return;
         }
+        
+        //Now in this step let's call OceanMonitoringService, so we can get Ocean conditions
+        try {
+           
+            OceanData oceanData = getOceanData(location);
 
-        // Check the rules that I am applying for the server
-        SeafoodEvaluation evaluation = buildEvaluation(species, location);
+            // Lets create the evaluation using both species and ocean conditions
+            SeafoodEvaluation evaluation = buildEvaluation(species, location, oceanData);
 
-        // Send result to client
-        responseObserver.onNext(evaluation);
-        responseObserver.onCompleted();
+            // Send evaluation back to client
+            responseObserver.onNext(evaluation);
+            responseObserver.onCompleted();
+
+        } catch (Exception e) {
+            // If Ocean service fails, Seafood service returns an error
+            responseObserver.onError(
+                Status.INTERNAL
+                    .withDescription("Failed to evaluate seafood using ocean data: " + e.getMessage())
+                    .withCause(e)
+                    .asRuntimeException()
+            );
+        }
     }
-    
-//Comment for me: Right now I can test one specie now for the GUI how can the client send multiple sepecies?    
-//Client sends several request and the server will return a response (Summary)
+
+
+    //Comment for Gaby(me): Client send different inputs and the server will send back a several responses or summary?
     @Override
     public StreamObserver<SeafoodRequest> evaluateSeafoodBatch(StreamObserver<BatchSummary> responseObserver) {
 
@@ -64,33 +85,43 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
 
             @Override
             public void onNext(SeafoodRequest request) {
-                // Called every time client sends one seafood item
                 totalItems++;
-                
-                //Evaluation according to the rules
-                SeafoodEvaluation evaluation = buildEvaluation(
-                        request.getSpecies().trim().toLowerCase(),
-                        request.getLocation().trim().toLowerCase()
-                );
 
-                // Count unsafe items
-                if (!evaluation.getSafeToEat()) {
-                    unsafeItems++;
-                }
+                try {
+                    // Get ocean conditions for each seafood item
+                    OceanData oceanData = getOceanData(request.getLocation().trim().toLowerCase());
 
-                // Count unsustainable items
-                if (!evaluation.getSustainable()) {
-                    unsustainableItems++;
+                    // Evaluate each item
+                    SeafoodEvaluation evaluation = buildEvaluation(
+                            request.getSpecies().trim().toLowerCase(),
+                            request.getLocation().trim().toLowerCase(),
+                            oceanData
+                    );
+
+                    // Count unsafe items
+                    if (!evaluation.getSafeToEat()) {
+                        unsafeItems++;
+                    }
+
+                    // Count unsustainable items
+                    if (!evaluation.getSustainable()) {
+                        unsustainableItems++;
+                    }
+
+                } catch (Exception e) {
+                    System.err.println("Error evaluating batch item: " + e.getMessage());
                 }
             }
             
-            //If something goes wrong send a message to the client
+            //If there is an error send back this message
+
             @Override
             public void onError(Throwable t) {
                 System.err.println("Error in client stream: " + t.getMessage());
             }
             
-            //Call this method when the client sends all the request and build a summary with all the information
+            //After the client sends all the items lets build a summary
+
             @Override
             public void onCompleted() {
                 BatchSummary summary = BatchSummary.newBuilder()
@@ -103,39 +134,78 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
                         )
                         .build();
 
-                // Send final summary back to client
+                // Send summary back to client
                 responseObserver.onNext(summary);
                 responseObserver.onCompleted();
             }
         };
     }
 
-    // In this step I am setting the rules: The seafood is safe? its sustainable?
-    private SeafoodEvaluation buildEvaluation(String species, String location) {
+    //Lets try to connect the seafood server and ocean server
+    private OceanData getOceanData(String location) {
+
+        // Create channel to Ocean service
+        ManagedChannel channel = ManagedChannelBuilder
+                .forAddress("localhost", 50051)
+                .usePlaintext()
+                .build();
+
+        try {
+            OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
+                    OceanMonitoringServiceGrpc.newBlockingStub(channel);
+
+            // location request
+            Location request = Location.newBuilder()
+                    .setLocation(location)
+                    .build();
+
+            // Call Ocean Monitor and get current ocean conditions
+            return stub.currentOceanConditions(request);
+
+        } finally {
+            // Close channel after request
+            channel.shutdown();
+        }
+    }
+
+    // This method evaluates seafood according to ocean conditions and species rules
+    private SeafoodEvaluation buildEvaluation(String species, String location, OceanData oceanData) {
         
-        //First: Everything is safe
+        //First: if everything is perfect send this
         boolean safeToEat = true;
         boolean sustainable = true;
         String alarm = "Safe";
 
-        // Second: Contamination example
-        if (location.equals("dublin") && species.equals("prawn")) {
+        // Second: Unsafe if pollution level is high
+        if (oceanData.getPollutionLevel() > 0.5) {
             safeToEat = false;
-            alarm = "Contaminated";
+            alarm = "Contaminated due to high pollution";
         }
 
-        // Thirs: Sustainability example
+        // Third: Unsafe if oxygen level is too low (poor conditions)
+        if (oceanData.getOxygenLevel() < 6.5) {
+            safeToEat = false;
+            alarm = "Unsafe due to low oxygen levels";
+        }
+
+        // Four: Unsustainable species example - overfishing
         if (species.equals("tuna")) {
             sustainable = false;
             alarm = "Unsustainable fishing practices";
         }
 
-        // Fourth: If the specie is not sustainable send another specie
+        // Five: Send sustainable options
         if (species.equals("mussels") || species.equals("sardines")) {
             sustainable = true;
         }
-        
-        //Fith: Lastly send the summary back
+
+        // Test: Location and seafood item
+        if (location.equals("dublin") && species.equals("prawn")) {
+            safeToEat = false;
+            alarm = "Contaminated";
+        }
+
+        // Build response
         return SeafoodEvaluation.newBuilder()
                 .setSpecies(species)
                 .setSafeToEat(safeToEat)
@@ -143,6 +213,7 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
                 .setAlarm(alarm)
                 .build();
     }
-}  
-    
-    
+}
+        
+        
+        
