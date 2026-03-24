@@ -25,7 +25,16 @@ public class SeafoodMonitoringServer {
             //Start server
             server.start();
             System.out.println("SeafoodMonitoringService is running on port 50052");
-
+            
+            // Register service using JmDNS
+            SmartSeafoodServiceRegistration.registerService(
+                    "_seafoodmonitoring._tcp.local.",
+                    "SeafoodMonitoringService",
+                    50052,
+                    "Seafood Monitoring gRPC Service"
+            );
+            
+            //Keep server 
             server.awaitTermination();
 
         } catch (Exception e) {

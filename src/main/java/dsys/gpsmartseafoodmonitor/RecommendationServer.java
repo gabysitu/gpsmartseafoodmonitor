@@ -25,6 +25,14 @@ public class RecommendationServer {
             // Start server
             server.start();
             System.out.println("RecommendationService is running on port 50053");
+            
+            // JmDNS
+            SmartSeafoodServiceRegistration.registerService(
+                    "_recommendation._tcp.local.",
+                    "RecommendationService",
+                    50053,
+                    "Recommendation gRPC Service"
+            );
 
             // Keep server RUNNING
             server.awaitTermination();

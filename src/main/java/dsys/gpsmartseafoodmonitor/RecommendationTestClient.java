@@ -19,26 +19,45 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
-public class RecommendationTestClient {
-    public static void main(String[] args) throws InterruptedException {
 
-        // call port
+// Import JmDNS 
+import javax.jmdns.ServiceInfo;
+
+public class RecommendationTestClient {
+     public static void main(String[] args) throws InterruptedException {
+
+        // Discover Recommendation service
+        ServiceInfo serviceInfo = SmartSeafoodServiceDiscovery.discoverService("_recommendation._tcp.local.");
+
+        // Check if service was found
+        if (serviceInfo == null) {
+            System.out.println("RecommendationService not found.");
+            return;
+        }
+
+        // Get discovered host and port
+        String host = serviceInfo.getHostAddresses()[0];
+        int port = serviceInfo.getPort();
+
+        System.out.println("Discovered RecommendationService at " + host + ":" + port);
+
+        // Create channel to discovered service
         ManagedChannel channel = ManagedChannelBuilder
-                .forAddress("localhost", 50053)
+                .forAddress(host, port)
                 .usePlaintext()
                 .build();
 
         try {
- 
+          
             RecommendationServiceGrpc.RecommendationServiceStub stub =
                     RecommendationServiceGrpc.newStub(channel);
 
-            
+       
             StreamObserver<RecommendationResponse> responseObserver = new StreamObserver<RecommendationResponse>() {
 
                 @Override
                 public void onNext(RecommendationResponse response) {
-                    // Expected: print recommended species and species to avoid
+                    // Expected: print recommendation response from server
                     System.out.println("Recommendation Response:");
                     System.out.println("Recommended Species: " + response.getRecommendedSpeciesList());
                     System.out.println("Avoid Species: " + response.getAvoidSpeciesList());
@@ -56,7 +75,7 @@ public class RecommendationTestClient {
                 }
             };
 
-            // Open request stream to server
+          
             StreamObserver<RecommendationRequest> requestObserver =
                     stub.liveRecommendations(responseObserver);
 
@@ -78,10 +97,10 @@ public class RecommendationTestClient {
                             .build()
             );
 
-            // Tell server client has finished sending messages
+            // Complete client stream
             requestObserver.onCompleted();
 
-            // Tell the server to Wait a little for the responses
+            // Wait for async responses
             Thread.sleep(3000);
 
         } finally {
@@ -90,4 +109,5 @@ public class RecommendationTestClient {
     }
 }
     
-
+    
+    
