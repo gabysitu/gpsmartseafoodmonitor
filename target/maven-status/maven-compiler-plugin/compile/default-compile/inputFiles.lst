@@ -17,6 +17,7 @@ C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\ma
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\recommendation\RecommendationServiceGrpc.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\seafoodmonitoring\SeafoodRequestOrBuilder.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\seafoodmonitoring\SeafoodRequest.java
+C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\SmartSeafoodServiceDiscovery.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\oceanmonitoring\OceanData.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\oceanmonitoring\Location.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\seafoodmonitoring\BatchSummaryOrBuilder.java
@@ -24,7 +25,9 @@ C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\ma
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\SeafoodMonitoringServiceImpl.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\Gpsmartseafoodmonitor.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\RecommendationTestClient.java
+C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\SeafoodGUI.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\SeafoodMonitoringServer.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\oceanmonitoring\LocationOrBuilder.java
+C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\dsys\gpsmartseafoodmonitor\SmartSeafoodServiceRegistration.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\oceanmonitoring\OceanMonitoringServiceGrpc.java
 C:\Users\gport\OneDrive\Documentos\NetBeansProjects\gpsmartseafoodmonitor\src\main\java\generated\grpc\recommendation\RecommendationResponseOrBuilder.java
