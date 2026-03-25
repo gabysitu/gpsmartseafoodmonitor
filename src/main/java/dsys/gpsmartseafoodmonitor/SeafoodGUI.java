@@ -198,7 +198,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
     private void oceanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oceanButtonActionPerformed
         // TODO add your handling code here:
         String location = locationField.getText();
-        String species = speciesField.getText();
+        
 
 try {
     ServiceInfo serviceInfo = SmartSeafoodServiceDiscovery.discoverService("_oceanmonitoring._tcp.local.");
@@ -216,17 +216,17 @@ try {
             .usePlaintext()
             .build();
 
-    OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
-            OceanMonitoringServiceGrpc.newBlockingStub(channel);
+   generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
+            generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.newBlockingStub(channel);
 
-    Location request = Location.newBuilder()
+    generated.grpc.oceanmonitoring.Location request = generated.grpc.oceanmonitoring.Location.newBuilder()
             .setLocation(location)
             .build();
 
-    OceanData response = stub.currentOceanConditions(request);
+    generated.grpc.oceanmonitoring.OceanData response = stub.currentOceanConditions(request);
 
     outputarea.setText(
-            "Ocean Conditions:\n" +
+            "Ocean Conditions for " + location + "\n\n" +
             "Temperature: " + response.getTemperatureC() + "\n" +
             "Oxygen: " + response.getOxygenLevel() + "\n" +
             "pH: " + response.getAcidityPH() + "\n" +
@@ -242,6 +242,51 @@ try {
 
     private void evaluateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_evaluateButtonActionPerformed
         // TODO add your handling code here:
+        String location = locationField.getText();
+        String species = speciesField.getText();
+
+
+try {
+    ServiceInfo serviceInfo = SmartSeafoodServiceDiscovery.discoverService("_seafoodmonitoring._tcp.local.");
+
+    if (serviceInfo == null) {
+        outputarea.setText("Seafood service not found");
+        return;
+    }
+
+    String host = serviceInfo.getHostAddresses()[0];
+    int port = serviceInfo.getPort();
+
+    ManagedChannel channel = ManagedChannelBuilder
+            .forAddress(host, port)
+            .usePlaintext()
+            .build();
+
+    generated.grpc.seafoodmonitoring.SeafoodMonitoringServiceGrpc.SeafoodMonitoringServiceBlockingStub stub =
+            generated.grpc.seafoodmonitoring.SeafoodMonitoringServiceGrpc.newBlockingStub(channel);
+
+    generated.grpc.seafoodmonitoring.SeafoodRequest request =
+            generated.grpc.seafoodmonitoring.SeafoodRequest.newBuilder()
+                    .setSpecies(species)
+                    .setLocation(location)
+                    .build();
+
+    generated.grpc.seafoodmonitoring.SeafoodEvaluation response = stub.evaluateSeafood(request);
+
+    outputarea.setText(
+            "Seafood Evaluation\n\n" +
+            "Species: " + response.getSpecies() + "\n" +
+            "Safe to eat: " + response.getSafeToEat() + "\n" +
+            "Sustainable: " + response.getSustainable() + "\n" +
+            "Alarm: " + response.getAlarm()
+    );
+
+    channel.shutdown();
+
+} catch (Exception e) {
+    outputarea.setText("Error:\n" + e.getMessage());
+}
+        
     }//GEN-LAST:event_evaluateButtonActionPerformed
 
     private void recommendationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recommendationsButtonActionPerformed
