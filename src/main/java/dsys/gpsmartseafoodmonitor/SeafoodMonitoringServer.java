@@ -17,6 +17,7 @@ public class SeafoodMonitoringServer {
     public static void main(String[] args) {
         
         //Create the server in a different port 
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             Server server = ServerBuilder.forPort(50052)
                     .addService(new SeafoodMonitoringServiceImpl())

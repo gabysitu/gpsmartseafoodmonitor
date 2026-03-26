@@ -16,6 +16,8 @@ import io.grpc.ServerBuilder;
 public class OceanMonitoringServer {
     
     public static void main(String[] args) {
+        
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             // Create server on port 50051
             Server server = ServerBuilder.forPort(50051)
@@ -37,8 +39,8 @@ public class OceanMonitoringServer {
             // Keep server running 
             server.awaitTermination();
 
+            // If server fails 
         } catch (Exception e) {
-            // If server fails → print error
             e.printStackTrace();
         }
     }

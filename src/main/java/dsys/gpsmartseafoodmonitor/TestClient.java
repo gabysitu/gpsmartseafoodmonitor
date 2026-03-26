@@ -45,7 +45,7 @@ public class TestClient {
                 .forAddress(host, port)
                 .usePlaintext()
                 .build();
-
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             // Create blocking stub
             OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =

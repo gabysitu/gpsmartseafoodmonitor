@@ -23,6 +23,7 @@ public class SmartSeafoodServiceDiscovery {
 
     // Discover a service by its type
     public static ServiceInfo discoverService(String serviceType) {
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             // Create JmDNS instance if not already created
             if (jmdns == null) {

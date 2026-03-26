@@ -20,6 +20,7 @@ public class SmartSeafoodServiceRegistration {
 
     // Register a service name, type, port and description
     public static void registerService(String serviceType, String serviceName, int port, String description) {
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             // Create JmDNS instance using localhost
             if (jmdns == null) {

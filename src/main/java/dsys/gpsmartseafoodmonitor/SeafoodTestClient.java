@@ -45,7 +45,8 @@ public class SeafoodTestClient {
                 .forAddress(host, port)
                 .usePlaintext()
                 .build();
-
+        
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
            
             SeafoodMonitoringServiceGrpc.SeafoodMonitoringServiceBlockingStub stub =

@@ -52,7 +52,8 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
             );
             return;
         }
-
+        
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             // Discover and call Ocean service to get current ocean conditions
             OceanData oceanData = getOceanData(location);

@@ -16,6 +16,8 @@ import io.grpc.ServerBuilder;
 
 public class RecommendationServer {
     public static void main(String[] args) {
+        
+        //Start of Handling Exceptions - I saw this in Algorithm class
         try {
             // Create new server port different from the Monitor and Seafood
             Server server = ServerBuilder.forPort(50053)

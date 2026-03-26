@@ -61,7 +61,7 @@ public class OceanMonitoringServiceImpl extends OceanMonitoringServiceGrpc.Ocean
             responseObserver.onError(
                 Status.INVALID_ARGUMENT
                     .withDescription("Location cannot be empty")
-                    .asRuntimeException()
+                    .asRuntimeException() // Exception
             );
             return;
         }
