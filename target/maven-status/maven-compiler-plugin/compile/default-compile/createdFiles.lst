@@ -31,6 +31,7 @@ dsys\gpsmartseafoodmonitor\SeafoodGUI$2.class
 generated\grpc\oceanmonitoring\LocationOrBuilder.class
 generated\grpc\oceanmonitoring\OceanData$Builder.class
 generated\grpc\oceanmonitoring\OceanMonitoringProto$1.class
+dsys\gpsmartseafoodmonitor\SeafoodGUI$5.class
 generated\grpc\recommendation\RecommendationProto$1.class
 generated\grpc\recommendation\RecommendationRequestOrBuilder.class
 generated\grpc\oceanmonitoring\Location.class
@@ -54,6 +55,7 @@ generated\grpc\recommendation\RecommendationServiceGrpc$RecommendationServiceBlo
 generated\grpc\seafoodmonitoring\SeafoodRequest$1.class
 generated\grpc\seafoodmonitoring\SeafoodRequest$Builder.class
 generated\grpc\seafoodmonitoring\SeafoodRequestOrBuilder.class
+dsys\gpsmartseafoodmonitor\SeafoodGUI$6.class
 dsys\gpsmartseafoodmonitor\SeafoodMonitoringServer.class
 generated\grpc\oceanmonitoring\OceanMonitoringServiceGrpc$OceanMonitoringServiceImplBase.class
 generated\grpc\recommendation\RecommendationServiceGrpc$RecommendationServiceStub.class

@@ -44,6 +44,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
         oceanButton = new javax.swing.JButton();
         evaluateButton = new javax.swing.JButton();
         recommendationsButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         Output = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         outputarea = new javax.swing.JTextArea();
@@ -75,11 +76,11 @@ public class SeafoodGUI extends javax.swing.JFrame {
         InputLayout.setHorizontalGroup(
             InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InputLayout.createSequentialGroup()
-                .addGap(124, 124, 124)
-                .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(43, 43, 43)
+                .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(Location)
                     .addComponent(Species))
-                .addGap(68, 68, 68)
+                .addGap(101, 101, 101)
                 .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(speciesField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -120,28 +121,36 @@ public class SeafoodGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Services");
+
         javax.swing.GroupLayout ButtonsLayout = new javax.swing.GroupLayout(Buttons);
         Buttons.setLayout(ButtonsLayout);
         ButtonsLayout.setHorizontalGroup(
             ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ButtonsLayout.createSequentialGroup()
-                .addGap(126, 126, 126)
+                .addGap(255, 255, 255)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(ButtonsLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addComponent(oceanButton)
-                .addGap(77, 77, 77)
+                .addGap(88, 88, 88)
                 .addComponent(evaluateButton)
-                .addGap(78, 78, 78)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
                 .addComponent(recommendationsButton)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap())
         );
         ButtonsLayout.setVerticalGroup(
             ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ButtonsLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addGroup(ButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(oceanButton)
                     .addComponent(evaluateButton)
-                    .addComponent(recommendationsButton))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addComponent(recommendationsButton)
+                    .addComponent(oceanButton))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         outputarea.setColumns(20);
@@ -160,7 +169,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
         );
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setText("Smart Seafood Monitor System");
+        jLabel3.setText("Smart Seafood Monitor ");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -170,7 +179,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
             .addComponent(Buttons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(Output, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(212, 212, 212)
+                .addGap(176, 176, 176)
                 .addComponent(jLabel3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -390,6 +399,7 @@ try {
     private javax.swing.JPanel Output;
     private javax.swing.JLabel Species;
     private javax.swing.JButton evaluateButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField locationField;
