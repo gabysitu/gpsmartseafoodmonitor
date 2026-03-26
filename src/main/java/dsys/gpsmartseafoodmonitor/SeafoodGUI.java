@@ -38,7 +38,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
         Input = new javax.swing.JPanel();
         Location = new javax.swing.JLabel();
         locationField = new javax.swing.JTextField();
-        species = new javax.swing.JLabel();
+        Species = new javax.swing.JLabel();
         speciesField = new javax.swing.JTextField();
         Buttons = new javax.swing.JPanel();
         oceanButton = new javax.swing.JButton();
@@ -61,7 +61,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
             }
         });
 
-        species.setText("Species");
+        Species.setText("Species");
 
         speciesField.setText("Tuna");
         speciesField.addActionListener(new java.awt.event.ActionListener() {
@@ -78,7 +78,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
                 .addGap(124, 124, 124)
                 .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(Location)
-                    .addComponent(species))
+                    .addComponent(Species))
                 .addGap(68, 68, 68)
                 .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -94,7 +94,7 @@ public class SeafoodGUI extends javax.swing.JFrame {
                     .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(species)
+                    .addComponent(Species)
                     .addComponent(speciesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(47, Short.MAX_VALUE))
         );
@@ -291,6 +291,67 @@ try {
 
     private void recommendationsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recommendationsButtonActionPerformed
         // TODO add your handling code here:
+          String location = locationField.getText();
+          String species = speciesField.getText();
+          
+   
+    try {
+        ServiceInfo serviceInfo = SmartSeafoodServiceDiscovery.discoverService("_recommendation._tcp.local.");
+
+        if (serviceInfo == null) {
+            outputarea.setText("Recommendation service not found");
+            return;
+        }
+
+        String host = serviceInfo.getHostAddresses()[0];
+        int port = serviceInfo.getPort();
+
+        ManagedChannel channel = ManagedChannelBuilder
+                .forAddress(host, port)
+                .usePlaintext()
+                .build();
+
+        generated.grpc.recommendation.RecommendationServiceGrpc.RecommendationServiceStub stub =
+                generated.grpc.recommendation.RecommendationServiceGrpc.newStub(channel);
+
+        StringBuilder result = new StringBuilder();
+
+        io.grpc.stub.StreamObserver<generated.grpc.recommendation.RecommendationResponse> responseObserver =
+                new io.grpc.stub.StreamObserver<generated.grpc.recommendation.RecommendationResponse>() {
+            @Override
+            public void onNext(generated.grpc.recommendation.RecommendationResponse response) {
+                result.append("Recommendations\n\n");
+                result.append("Recommended: ").append(response.getRecommendedSpeciesList()).append("\n");
+                result.append("Avoid: ").append(response.getAvoidSpeciesList()).append("\n");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                outputarea.setText("Error: " + t.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                outputarea.setText(result.toString());
+            }
+        };
+
+        io.grpc.stub.StreamObserver<generated.grpc.recommendation.RecommendationRequest> requestObserver =
+                stub.liveRecommendations(responseObserver);
+
+        requestObserver.onNext(
+                generated.grpc.recommendation.RecommendationRequest.newBuilder()
+                        .setLocation(location)
+                        .setSelectedSpecies(species)
+                        .setReason("GUI request")
+                        .build()
+        );
+
+        requestObserver.onCompleted();
+
+    } catch (Exception e) {
+        outputarea.setText("Error:\n" + e.getMessage());
+    }
     }//GEN-LAST:event_recommendationsButtonActionPerformed
 
     private void speciesFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speciesFieldActionPerformed
@@ -327,6 +388,7 @@ try {
     private javax.swing.JPanel Input;
     private javax.swing.JLabel Location;
     private javax.swing.JPanel Output;
+    private javax.swing.JLabel Species;
     private javax.swing.JButton evaluateButton;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
@@ -334,7 +396,6 @@ try {
     private javax.swing.JButton oceanButton;
     private javax.swing.JTextArea outputarea;
     private javax.swing.JButton recommendationsButton;
-    private javax.swing.JLabel species;
     private javax.swing.JTextField speciesField;
     // End of variables declaration//GEN-END:variables
 }
