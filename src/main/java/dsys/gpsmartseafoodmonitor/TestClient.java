@@ -68,6 +68,7 @@ public class TestClient {
 
         } catch (Exception e) {
             e.printStackTrace();
+            //This part of the catch/Try exception is very important beacause it will finish even if an exception is thrown or not
         } finally {
             channel.shutdown();
         }

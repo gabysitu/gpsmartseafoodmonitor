@@ -102,7 +102,8 @@ public class RecommendationTestClient {
 
             // Wait for async responses
             Thread.sleep(3000);
-
+            
+//This part of the catch/Try exception is very important beacause it will finish even if an exception is thrown or not
         } finally {
             channel.shutdown();
         }

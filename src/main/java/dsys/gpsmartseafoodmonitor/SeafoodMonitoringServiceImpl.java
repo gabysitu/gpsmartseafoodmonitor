@@ -178,9 +178,9 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
 
             // Call Ocean unary RPC
             return stub.currentOceanConditions(request);
-
+            
+//This part of the catch/Try exception is very important beacause it will finish even if an exception is thrown or not
         } finally {
-            //close channel
             channel.shutdown();
         }
     }
