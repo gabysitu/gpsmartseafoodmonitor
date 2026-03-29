@@ -4,12 +4,19 @@
  */
 package dsys.gpsmartseafoodmonitor;
 
+//Import grpC
 import generated.grpc.oceanmonitoring.Location;
 import generated.grpc.oceanmonitoring.OceanData;
 import generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import javax.jmdns.ServiceInfo;
+
+//Import Metadata
+import io.grpc.Metadata;
+import io.grpc.stub.MetadataUtils;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  *
@@ -225,12 +232,34 @@ try {
             .usePlaintext()
             .build();
 
-   generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
-            generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.newBlockingStub(channel);
+    
+    //Metadata
+    //First I have to create the metadata objetc
+    Metadata metadata = new Metadata();
+    
+    Metadata.Key<String> clientNameKey =
+                Metadata.Key.of("client-name", Metadata.ASCII_STRING_MARSHALLER);
+        Metadata.Key<String> requestSourceKey =
+                Metadata.Key.of("request-source", Metadata.ASCII_STRING_MARSHALLER);
+    
+       metadata.put(clientNameKey, "SeafoodGUI");
+       metadata.put(requestSourceKey, "Ocean Button");
+       
+       // STUB
+        generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
+                generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.newBlockingStub(channel);
 
-    generated.grpc.oceanmonitoring.Location request = generated.grpc.oceanmonitoring.Location.newBuilder()
-            .setLocation(location)
-            .build();
+       //Advance features metadata and deadline
+       stub = MetadataUtils.attachHeaders(stub, metadata)
+                .withDeadlineAfter(3, TimeUnit.SECONDS);
+       
+       //Build
+       generated.grpc.oceanmonitoring.Location request =
+                generated.grpc.oceanmonitoring.Location.newBuilder()
+                        .setLocation(location)
+                        .build();
+       
+       //Call server
 
     generated.grpc.oceanmonitoring.OceanData response = stub.currentOceanConditions(request);
 
@@ -239,7 +268,8 @@ try {
             "Temperature: " + response.getTemperatureC() + "\n" +
             "Oxygen: " + response.getOxygenLevel() + "\n" +
             "pH: " + response.getAcidityPH() + "\n" +
-            "Pollution: " + response.getPollutionLevel()
+            "Pollution: " + response.getPollutionLevel() +
+            "Anvanced gRPC used: Metadata and Deadline"
     );
 
     channel.shutdown();

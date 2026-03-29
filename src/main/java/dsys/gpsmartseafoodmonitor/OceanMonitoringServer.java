@@ -12,23 +12,32 @@ package dsys.gpsmartseafoodmonitor;
 // Import gRPC server classes
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+//Metadata server
+import io.grpc.ServerInterceptors;
 
+//This class starts the OceanMonitoring
 public class OceanMonitoringServer {
     
     public static void main(String[] args) {
         
         //Start of Handling Exceptions - I saw this in Algorithm class
         try {
-            // Create server on port 50051
+            // Create server on port 50051 - different server from the other ones
             Server server = ServerBuilder.forPort(50051)
-                    .addService(new OceanMonitoringServiceImpl())
+                    
+                    //Add Metadata server
+                    .addService(ServerInterceptors.intercept(
+                            new OceanMonitoringServiceImpl(),
+                            new MetadataServer()
+                    ))
+                    
                     .build();
 
             // Start the server
             server.start();
             System.out.println("OceanMonitoringService is running on port 50051");
             
-            //Modify this for JmDNS
+            //Register Service with JmDNS
              SmartSeafoodServiceRegistration.registerService(
                     "_oceanmonitoring._tcp.local.",
                     "OceanMonitoringService",
@@ -36,7 +45,7 @@ public class OceanMonitoringServer {
                     "Ocean Monitoring gRPC Service"
             );
 
-            // Keep server running 
+            // Keep server running
             server.awaitTermination();
 
             // If server fails 

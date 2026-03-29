@@ -90,6 +90,7 @@ public class SeafoodMonitoringServiceImpl extends SeafoodMonitoringServiceGrpc.S
             @Override
             public void onNext(SeafoodRequest request) {
                 totalItems++;
+                
 
                 try {
                     // Discover Ocean service and get conditions for each item

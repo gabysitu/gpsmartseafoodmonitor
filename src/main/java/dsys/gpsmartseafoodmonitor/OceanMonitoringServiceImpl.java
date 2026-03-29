@@ -65,7 +65,7 @@ public class OceanMonitoringServiceImpl extends OceanMonitoringServiceGrpc.Ocean
             );
             return;
         }
-
+//error handling
         try {
             // Simulate real-time monitoring (sending multiple updates)
             for (int i = 0; i < 5; i++) {

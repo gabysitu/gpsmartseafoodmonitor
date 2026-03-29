@@ -1,0 +1,46 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package dsys.gpsmartseafoodmonitor;
+
+/**
+ *
+ * @author gport
+ */
+
+
+//Import
+import io.grpc.*;
+import io.grpc.ServerCall.Listener;
+
+public class MetadataServer implements ServerInterceptor{
+    
+    // Metadata key expected from the client
+    private static final Metadata.Key<String> CLIENT_NAME_KEY =
+            Metadata.Key.of("client-name", Metadata.ASCII_STRING_MARSHALLER);
+
+    private static final Metadata.Key<String> REQUEST_SOURCE_KEY =
+            Metadata.Key.of("request-source", Metadata.ASCII_STRING_MARSHALLER);
+
+    @Override
+    public <ReqT, RespT> Listener<ReqT> interceptCall(
+            ServerCall<ReqT, RespT> call,
+            Metadata headers,
+            ServerCallHandler<ReqT, RespT> next) {
+
+        // Read metadata values sent by the client
+        String clientName = headers.get(CLIENT_NAME_KEY);
+        String requestSource = headers.get(REQUEST_SOURCE_KEY);
+
+        // Print 
+        System.out.println("Metadata");
+        System.out.println("Client Name: " + clientName);
+        System.out.println("Request Source: " + requestSource);
+        System.out.println("=========================");
+
+        // Continue normal gRPC call
+        return next.startCall(call, headers);
+    }
+}
+    
