@@ -213,9 +213,10 @@ public class SeafoodGUI extends javax.swing.JFrame {
 
     private void oceanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_oceanButtonActionPerformed
         // TODO add your handling code here:
+        //1. This will read the location typed by the user
         String location = locationField.getText();
         
-
+//Discover the Monitor Service with JmDNS
 try {
     ServiceInfo serviceInfo = SmartSeafoodServiceDiscovery.discoverService("_oceanmonitoring._tcp.local.");
 
@@ -264,12 +265,14 @@ try {
     generated.grpc.oceanmonitoring.OceanData response = stub.currentOceanConditions(request);
 
     outputarea.setText(
-            "Ocean Conditions for " + location + "\n\n" +
-            "Temperature: " + response.getTemperatureC() + "\n" +
-            "Oxygen: " + response.getOxygenLevel() + "\n" +
-            "pH: " + response.getAcidityPH() + "\n" +
-            "Pollution: " + response.getPollutionLevel() +
-            "Anvanced gRPC used: Metadata and Deadline"
+            "Ocean Conditions for " + location + "\n\n"
+            + "Temperature: " + response.getTemperatureC() + "\n"
+            + "Oxygen: " + response.getOxygenLevel() + "\n"
+            + "pH: " + response.getAcidityPH() + "\n"
+            + "Pollution: " + response.getPollutionLevel() + "\n\n"
+            + "Advanced gRPC Features Used:\n"
+            + "- Metadata\n"
+            + "- Deadline"
     );
 
     channel.shutdown();

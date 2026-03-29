@@ -24,6 +24,7 @@ generated\grpc\seafoodmonitoring\SeafoodMonitoringProto.class
 generated\grpc\oceanmonitoring\OceanMonitoringServiceGrpc.class
 generated\grpc\seafoodmonitoring\SeafoodMonitoringServiceGrpc$SeafoodMonitoringServiceStub.class
 generated\grpc\seafoodmonitoring\BatchSummary$1.class
+dsys\gpsmartseafoodmonitor\MetadataServer.class
 dsys\gpsmartseafoodmonitor\SmartSeafoodServiceDiscovery$1.class
 generated\grpc\seafoodmonitoring\SeafoodMonitoringServiceGrpc$SeafoodMonitoringServiceFutureStub.class
 generated\grpc\seafoodmonitoring\SeafoodRequest.class
