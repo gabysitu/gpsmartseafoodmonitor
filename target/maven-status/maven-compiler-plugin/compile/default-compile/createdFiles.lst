@@ -69,6 +69,7 @@ dsys\gpsmartseafoodmonitor\RecommendationServiceImpl.class
 dsys\gpsmartseafoodmonitor\SeafoodGUI$3.class
 generated\grpc\recommendation\RecommendationServiceGrpc$RecommendationServiceFutureStub.class
 dsys\gpsmartseafoodmonitor\Gpsmartseafoodmonitor.class
+dsys\gpsmartseafoodmonitor\SeafoodGUI$7.class
 generated\grpc\oceanmonitoring\OceanMonitoringServiceGrpc$OceanMonitoringServiceBlockingStub.class
 generated\grpc\oceanmonitoring\OceanDataOrBuilder.class
 dsys\gpsmartseafoodmonitor\RecommendationServiceImpl$1.class

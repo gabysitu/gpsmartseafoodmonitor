@@ -47,6 +47,8 @@ public class SeafoodGUI extends javax.swing.JFrame {
         locationField = new javax.swing.JTextField();
         Species = new javax.swing.JLabel();
         speciesField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        clientNameField = new javax.swing.JTextField();
         Buttons = new javax.swing.JPanel();
         oceanButton = new javax.swing.JButton();
         evaluateButton = new javax.swing.JButton();
@@ -78,19 +80,31 @@ public class SeafoodGUI extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Client Name");
+
+        clientNameField.setText("GUI");
+        clientNameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clientNameFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout InputLayout = new javax.swing.GroupLayout(Input);
         Input.setLayout(InputLayout);
         InputLayout.setHorizontalGroup(
             InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(InputLayout.createSequentialGroup()
                 .addGap(43, 43, 43)
-                .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(Location)
-                    .addComponent(Species))
-                .addGap(101, 101, 101)
                 .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(locationField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(speciesField, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(Location)
+                        .addComponent(Species))
+                    .addComponent(jLabel2))
+                .addGap(82, 82, 82)
+                .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(locationField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(speciesField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(clientNameField))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         InputLayout.setVerticalGroup(
@@ -104,7 +118,14 @@ public class SeafoodGUI extends javax.swing.JFrame {
                 .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Species)
                     .addComponent(speciesField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(InputLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2))
+                    .addGroup(InputLayout.createSequentialGroup()
+                        .addComponent(clientNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 7, Short.MAX_VALUE))))
         );
 
         oceanButton.setText("Check Ocean");
@@ -237,14 +258,27 @@ try {
     //Metadata
     //First I have to create the metadata objetc
     Metadata metadata = new Metadata();
-    
-    Metadata.Key<String> clientNameKey =
-                Metadata.Key.of("client-name", Metadata.ASCII_STRING_MARSHALLER);
-        Metadata.Key<String> requestSourceKey =
-                Metadata.Key.of("request-source", Metadata.ASCII_STRING_MARSHALLER);
-    
-       metadata.put(clientNameKey, "SeafoodGUI");
-       metadata.put(requestSourceKey, "Ocean Button");
+
+    Metadata.Key<String> clientNameKey
+            = Metadata.Key.of("client-name", Metadata.ASCII_STRING_MARSHALLER);
+
+    Metadata.Key<String> requestSourceKey
+            = Metadata.Key.of("request-source", Metadata.ASCII_STRING_MARSHALLER);
+
+    //Read the name from the GUI
+    String clientName = clientNameField.getText();
+
+    //Add data to the GUI
+    metadata.put(clientNameKey, clientName);
+    metadata.put(requestSourceKey, "Ocean Button");
+
+//    String clientName = clientNameField.getText();
+//    metadata.put(clientNameKey, clientName);
+
+      
+
+// metadata.put(clientNameKey, "SeafoodGUI");
+      // metadata.put(requestSourceKey, "Ocean Button");
        
        // STUB
         generated.grpc.oceanmonitoring.OceanMonitoringServiceGrpc.OceanMonitoringServiceBlockingStub stub =
@@ -400,6 +434,10 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_speciesFieldActionPerformed
 
+    private void clientNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clientNameFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clientNameFieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -431,8 +469,10 @@ try {
     private javax.swing.JLabel Location;
     private javax.swing.JPanel Output;
     private javax.swing.JLabel Species;
+    private javax.swing.JTextField clientNameField;
     private javax.swing.JButton evaluateButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField locationField;
